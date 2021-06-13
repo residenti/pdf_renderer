@@ -6,9 +6,16 @@ class PdfDeliveryTest < ActionDispatch::IntegrationTest
 
     assert_match "PDF", response.body
     assert_equal "binary", headers["Content-Transfer-Encoding"]
+    assert_equal "attachment; filename=\"contents.pdf\"; filename*=UTF-8''contents.pdf", headers["Content-Disposition"]
+    assert_equal "application/pdf", headers["Content-Type"]
+  end
 
-    assert_equal "attachment; filename=\"contents.pdf\"; filename*=UTF-8''contents.pdf",
-      headers["Content-Disposition"]
+  test "pdf renderer uses the specified template" do
+    get another_path(format: :pdf)
+
+    assert_match "PDF", response.body
+    assert_equal "binary", headers["Content-Transfer-Encoding"]
+    assert_equal "attachment; filename=\"contents.pdf\"; filename*=UTF-8''contents.pdf", headers["Content-Disposition"]
     assert_equal "application/pdf", headers["Content-Type"]
   end
 end
